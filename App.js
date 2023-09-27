@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity, FlatList, Modal} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function App() {
 
