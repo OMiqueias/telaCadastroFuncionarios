@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity} from 'react-native';
-
-
+import React from 'react';
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity, FlatList, Modal} from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 
 export default function App() {
+
   return (
     <ScrollView style={styles.ScrollView}>
 
       <View style={styles.container}>
-
         <StatusBar hidden />
 
         <View style={styles.buttonContainer}>
@@ -23,12 +23,16 @@ export default function App() {
           marginTop="5%"
         />
       </View>
+
       <View style={styles.containerMeio}>
         <View style={styles.containerInterno}>
 
           <Text style={styles.subTitulosDivisao}>Informações Pessoais:</Text>
           <TextInput keyboardType="numeric" placeholder="Número de Registro."style={styles.textInput}/>
           <TextInput placeholder="Nome completo."style={styles.textInput}/>
+
+          
+
           <TextInput placeholder="Sexo."style={styles.textInput}/>
           <TextInput placeholder="Data de nascimento."style={styles.textInput}/>
           <TextInput keyboardType="numeric" textInputContentType="none" placeholder="RG."style={styles.textInput}/>
@@ -75,7 +79,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#238dd1',
     alignItems: 'center',
     justifyContent: 'center',
@@ -83,17 +86,19 @@ const styles = StyleSheet.create({
 
   containerMeio:{
     alignItems:"center",
-    justifyContent: "center",
+    justifyContent:"center",
     marginTop:30,
     marginRight:10,
     marginLeft:10,
     borderTopLeftRadius:10,
     borderTopRightRadius:10,
-    borderWidth:2,
+    borderLeftWidth:2,
+    borderRightWidth:2,
+    borderTopWidth:2,
+    borderColor:"gray",
   },
   
   containerInterno:{
-    flex:1,
     width:"100%",
     paddingTop:10,
     paddingBottom:10,
