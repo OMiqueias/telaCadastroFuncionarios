@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function App() {
@@ -30,24 +30,11 @@ export default function App() {
           <TextInput keyboardType="numeric" placeholder="Número de Registro."style={styles.textInput}/>
           <TextInput placeholder="Nome completo."style={styles.textInput}/>
 
-          
-
-          <TextInput placeholder="Sexo."style={styles.textInput}/>
-          <TextInput placeholder="Data de nascimento."style={styles.textInput}/>
-          <TextInput keyboardType="numeric" textInputContentType="none" placeholder="RG."style={styles.textInput}/>
+          <TextInput placeholder="Data de nascimento -> dia/mês/ano." style={styles.textInput}/>
           <TextInput keyboardType="numeric" textInputContentType="none" placeholder="CPF."style={styles.textInput}/>
           <TextInput keyboardType="phone-pad" placeholder="Telefone Fixo."style={styles.textInput}/>
           <TextInput keyboardType="phone-pad" placeholder="Celular."style={styles.textInput}/>
           <TextInput keyboardType="email-address" placeholder="E-mail."style={styles.textInput}/>
-
-          <Text style={styles.subTitulosDivisao}>Endereço do Colaborador:</Text>
-          <TextInput keyboardType="numeric" placeholder="CEP."style={styles.textInput}/>
-          <TextInput placeholder="País."style={styles.textInput}/>
-          <TextInput placeholder="Estado."style={styles.textInput}/>
-          <TextInput placeholder="Município."style={styles.textInput}/>
-          <TextInput placeholder="Estrada, Rua, etc..."style={styles.textInput}/>
-          <TextInput keyboardType="numeric" placeholder="Nº."style={styles.textInput}/>
-          <TextInput placeholder="Complemento."style={styles.textInput}/>
 
           <Text style={styles.subTitulosDivisao}>Informação de Ocupação:</Text>
           <TextInput placeholder="Setor."style={styles.textInput}/>
@@ -64,7 +51,7 @@ export default function App() {
 
         <View style={styles.buttonContainerEnviar}>
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.buttonCad}>
             <Text style={styles.buttonTextCad}>FINALIZAR CADASTRO</Text>
           </TouchableOpacity>
 
@@ -143,6 +130,14 @@ const styles = StyleSheet.create({
     borderColor:"#e3e3e3",
     borderTopRightRadius:5,
     borderBottomRightRadius:5,
+    padding:2,
+  },
+
+  buttonCad:{
+    backgroundColor:"#48c5fa", // Cor do botão
+    borderWidth:1,
+    borderColor:"#e3e3e3",
+    borderRadius:5,
     padding:2,
   },
 
