@@ -1,49 +1,183 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity, Modal} from 'react-native';
+import { TextInputMask } from 'react-native-masked-text'; // Importar TextInputMask
 
 export default function App() {
 
+  const [aviso, setAviso] = useState('');
+  const [registro, setRegistro] = useState('');
+  const [nome, setNome] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [setor, setSetor] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [telefoneFixo, setTelefoneFixo] = useState('');
+  const [telefoneFixoEmergencia, setTelefoneFixoEmergencia] = useState('');
+  const [modalVisible, setModalVisible] = useState(false); //
+  const [camposComErro, setCamposComErro] = useState([]); // Estado para rastrear o campo com erro
+  //Mascaras:
+  const [telefone, setTelefone] = useState(''); //Para mascara do telefone fixo
+  const [celular, setCelular] = useState(''); //Para mascara do celular
+  const [telefoneEmergencia, setTelefoneEmergencia] = useState(''); //Para mascara do telefone fixo para emergencia
+  const [celularEmergencia, setCelularEmergencia] = useState(''); //Para mascara do celular para emergencia
+
+  const handleCadastro = () => {
+    const camposObrigatorios = [
+      { campo: 'registro', valor: registro },
+      { campo: 'nome', valor: nome },
+      { campo: 'dataNascimento', valor: dataNascimento },
+      { campo: 'cpf', valor: cpf },
+      { campo: 'telefoneFixo', valor: telefoneFixo },
+      { campo: 'setor', valor: setor },
+      { campo: 'cargo', valor: cargo },
+      { campo: 'telefoneFixoEmergencia', valor: telefoneFixoEmergencia },
+    ];
+
+    const camposComErroTemp = camposObrigatorios
+      .filter((campo) => !campo.valor)
+      .map((campo) => campo.campo);
+
+    if (camposComErroTemp.length > 0) {
+      setAviso('Por favor, preencha todos os campos obrigatórios.');
+      setModalVisible(true);
+
+      // Alteração nas linhas abaixo para definir campos com erro
+      setCamposComErro(camposComErroTemp);
+    } else {
+      setAviso('');
+      setModalVisible(false);
+
+      // Limpar campos com erro quando o cadastro for bem-sucedido
+      setCamposComErro([]);
+    }
+  };
+
   return (
     <ScrollView style={styles.ScrollView}>
-
-      <View style={styles.container}>
-        <StatusBar hidden />
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>VOLTAR</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <StatusBar hidden />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{aviso}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+      </Modal>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>VOLTAR</Text>
+        </TouchableOpacity>
+      </View>
 
         <Image
           source={require('./assets/Logo.png')}
           style={{ width: 200, height: 200 }} // Ajuste as dimensões conforme necessário
           marginTop="5%"
         />
-      </View>
+    </View>
 
       <View style={styles.containerMeio}>
         <View style={styles.containerInterno}>
 
           <Text style={styles.subTitulosDivisao}>Informações Pessoais:</Text>
-          <TextInput keyboardType="numeric" placeholder="Número de Registro."style={styles.textInput}/>
-          <TextInput placeholder="Nome completo."style={styles.textInput}/>
+          <TextInput keyboardType="numeric" placeholder="Número de Registro."style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]} onChangeText={(text) => setRegistro(text)} value={registro}/>
+          <TextInput placeholder="Nome completo."style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]} autoCorrect={false} onChangeText={(text) => setNome(text)} value={nome}/>
 
-          <TextInput placeholder="Data de nascimento -> dia/mês/ano." style={styles.textInput}/>
-          <TextInput keyboardType="numeric" textInputContentType="none" placeholder="CPF."style={styles.textInput}/>
-          <TextInput keyboardType="phone-pad" placeholder="Telefone Fixo."style={styles.textInput}/>
-          <TextInput keyboardType="phone-pad" placeholder="Celular."style={styles.textInput}/>
-          <TextInput keyboardType="email-address" placeholder="E-mail."style={styles.textInput}/>
+          <TextInputMask
+          placeholder="CPF."
+          keyboardType='numeric'
+            type={'cpf'}
+            options={{
+              format:'999.999.999-99'
+            }}
+            style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]}
+            onChangeText={(text) => setCpf(text)} value={cpf}
+          
+          />
+
+          <TextInputMask
+            type={'datetime'}
+            options={{
+              format: 'DD/MM/YYYY',
+            }}
+            placeholder="Data de nascimento."
+            style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]}
+            onChangeText={(text) => setDataNascimento(text)}
+            value={dataNascimento}
+          />
+
+          <TextInputMask
+          keyboardType='numeric'
+            type={'custom'}
+            options={{
+              mask: '+99 (99) 9999-9999',
+            }}
+            placeholder="Telefone fixo com DDD."
+            style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]}
+            onChangeText={(text) => setTelefone(text)}
+            value={telefone}
+          />
+
+          <TextInputMask
+          keyboardType='numeric'
+            type={'custom'}
+            options={{
+              mask: '+99 (99) 99999-9999',
+            }}
+            placeholder="Celular com DDD."
+            style={styles.textInput}
+            value={celular}
+          />
+          
+          <TextInput keyboardType="email-address" placeholder="E-mail."style={styles.textInput} autoCapitalize="none" autoCorrect={false}/>
 
           <Text style={styles.subTitulosDivisao}>Informação de Ocupação:</Text>
-          <TextInput placeholder="Setor."style={styles.textInput}/>
-          <TextInput placeholder="Cargo."style={styles.textInput}/>
+          <TextInput placeholder="Setor."style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]} autoCorrect={false} onChangeText={(text) => setSetor(text)} value={setor}/>
+          <TextInput placeholder="Cargo."style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]} autoCorrect={false} onChangeText={(text) => setCargo(text)} value={cargo}/>
           
           <Text style={styles.subTitulosDivisaoEmergencia}>Contato de Emergência:</Text>
-          <TextInput keyboardType="phone-pad" placeholder="Telefone Fixo."style={styles.textInput}/>
-          <TextInput keyboardType="phone-pad" placeholder="Celular."style={styles.textInput}/>
-          <TextInput keyboardType="email-address" placeholder="E-mail."style={styles.textInput}/>
+
+          <TextInputMask
+          keyboardType='numeric'
+            type={'custom'}
+            options={{
+              mask: '+99 (99) 9999-9999',
+            }}
+            placeholder="Telefone fixo com DDD."
+            style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]}
+            onChangeText={(text) => setTelefoneEmergencia(text)}
+            value={telefoneEmergencia}
+          />
+
+          <TextInputMask
+          keyboardType='numeric'
+            type={'custom'}
+            options={{
+              mask: '+99 (99) 99999-9999',
+            }}
+            placeholder="Celular com DDD."
+            style={styles.textInput}
+            value={celularEmergencia}
+          />
+
+          <TextInput keyboardType="email-address" placeholder="E-mail."style={styles.textInput} autoCapitalize="none" autoCorrect={false}/>
         </View>
 
       </View>
@@ -51,7 +185,7 @@ export default function App() {
 
         <View style={styles.buttonContainerEnviar}>
 
-          <TouchableOpacity style={styles.buttonCad}>
+          <TouchableOpacity style={styles.buttonCad} onPress={handleCadastro}>
             <Text style={styles.buttonTextCad}>FINALIZAR CADASTRO</Text>
           </TouchableOpacity>
 
@@ -156,5 +290,46 @@ const styles = StyleSheet.create({
   buttonTextCad:{ //Para botão cadastro
     color:"white",
     fontSize:20,
+  },
+  containerAviso: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10, // Ajuste a posição conforme necessário
+  },
+  aviso: {
+    color: 'red', // Cor do aviso
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#48c5fa',
+    borderRadius: 5,
+    padding: 10,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  // Estilos condicionais para campos obrigatórios
+  requiredInput: {
+    borderColor: 'red',
+    borderWidth: 1,
   },
 });
