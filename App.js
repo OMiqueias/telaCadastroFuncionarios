@@ -106,6 +106,7 @@ export default function App() {
             type={'cpf'}
             options={{
               format:'999.999.999-99'
+              
             }}
             style={[styles.textInput, registro === '' && aviso !== '' && styles.requiredInput]}
             onChangeText={(text) => setCpf(text)} value={cpf}
@@ -143,6 +144,7 @@ export default function App() {
             }}
             placeholder="Celular com DDD."
             style={styles.textInput}
+            onChangeText={(text) => setCelular(text)}
             value={celular}
           />
           
@@ -174,6 +176,7 @@ export default function App() {
             }}
             placeholder="Celular com DDD."
             style={styles.textInput}
+            onChangeText={(text) => setCelularEmergencia(text)}
             value={celularEmergencia}
           />
 
